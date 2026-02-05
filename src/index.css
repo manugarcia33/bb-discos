@@ -422,11 +422,16 @@ body {
   }
 
   .logo-image {
-    max-height: 35px;
+    max-height: 60px;
   }
 
   .menu-btn {
     padding: 0.25rem;
+  }
+
+  .menu-btn svg {
+    width: 20px;
+    height: 20px;
   }
 
   .search-input {
@@ -438,8 +443,18 @@ body {
     font-size: 0.75rem;
   }
 
+  .search-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
   .icon-btn {
     padding: 0.2rem;
+  }
+
+  .icon-btn svg {
+    width: 20px;
+    height: 20px;
   }
 
   .header-right {
