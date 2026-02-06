@@ -77,8 +77,7 @@ export default function Footer() {
             >
               ingresá acá
             </a>
-            . /{" "}
-            <a href="/arrepentimiento">Botón de arrepentimiento</a>
+            . / <a href="/arrepentimiento">Botón de arrepentimiento</a>
           </p>
         </div>
       </div>
