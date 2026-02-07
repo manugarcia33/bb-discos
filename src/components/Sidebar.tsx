@@ -12,13 +12,14 @@ export default function Sidebar({
   onCategoryClick,
 }: SidebarProps) {
   const categories = [
-    { id: "all", name: "Todos los Vinilos", icon: "🎵" },
-    { id: "international", name: "Bandas Internacionales", icon: "🌍" },
-    { id: "solistas-masculinos", name: "Solistas Masculinos", icon: "🎤" },
-    { id: "solistas-femeninas", name: "Solistas Femeninas", icon: "⭐" },
-    { id: "jazz", name: "Jazz", icon: "🎺" },
-    { id: "brasilera", name: "Musica Brasilera", icon: "🕺" },
-    { id: "others", name: "Otros", icon: "📀" },
+    { id: "all", name: "Todos los Vinilos", icon: "" },
+    { id: "international", name: "Bandas Internacionales", icon: "" },
+    { id: "solistas-masculinos", name: "Solistas Masculinos", icon: "" },
+    { id: "solistas-femeninas", name: "Solistas Femeninas", icon: "" },
+    { id: "jazz", name: "Jazz", icon: "" },
+    { id: "nacional", name: "Musica Nacional", icon: "" },
+    { id: "brasilera", name: "Musica Brasilera", icon: "" },
+    { id: "others", name: "Otros", icon: "" },
   ];
 
   const handleCategoryClick = (categoryId: string) => {

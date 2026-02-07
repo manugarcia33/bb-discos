@@ -4,6 +4,9 @@ import Footer from "./components/Footer";
 import Hero from "./components/Hero";
 import ProductsView from "./components/ProductsView";
 import Sidebar from "./components/Sidebar";
+import FeaturedCarousel from "./components/FeaturedCarousel";
+import Categories from "./components/Categories";
+import OffersCarousel from "./components/OffersCarousel";
 
 function App() {
   const [currentView, setCurrentView] = useState("HOME");
@@ -81,7 +84,12 @@ function App() {
       <main className="flex-grow-1">
         {/* HOME VIEW */}
         {currentView === "HOME" && (
-          <Hero onViewCatalog={() => setCurrentView("PRODUCTS")} />
+          <>
+            <Hero onViewCatalog={() => setCurrentView("PRODUCTS")} />
+            <FeaturedCarousel />
+            <Categories onSelectCategory={handleCategoryClick} />
+            <OffersCarousel />
+          </>
         )}
 
         {/* PRODUCTS VIEW */}
