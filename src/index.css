@@ -1339,4 +1339,211 @@ body {
   .categories-section {
     padding: 3rem 0;
   }
+
+  .filters-bar {
+    position: static;
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+  }
 }
+
+/* Products Section */
+.products-section {
+  padding: 2rem 0 4rem;
+  min-height: 70vh;
+}
+
+.products-header {
+  margin-bottom: 2rem;
+}
+
+.products-count {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.no-products {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.no-products p {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Filters Bar */
+.filters-bar {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 1.5rem;
+  position: sticky;
+  top: 100px;
+  margin-bottom: 2rem;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.filters-bar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.filters-bar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.filters-bar::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.filters-bar::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
+}
+
+.filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.filters-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin: 0;
+}
+
+.clear-filters-btn {
+  background: none;
+  border: none;
+  color: var(--color-accent);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: opacity 0.3s;
+  font-weight: 500;
+}
+
+.clear-filters-btn:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+.filter-section {
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filter-section:last-child {
+  border-bottom: none;
+}
+
+.filter-section-header {
+  width: 100%;
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.filter-section-header:hover {
+  color: var(--color-accent);
+}
+
+.filter-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  font-size: 1rem;
+}
+
+.filter-options {
+  padding: 0.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.filter-option:hover {
+  background-color: #f8f9fa;
+}
+
+.filter-option input[type="checkbox"],
+.filter-option input[type="radio"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-accent);
+}
+
+.filter-option span {
+  font-size: 0.9rem;
+  color: var(--color-text-main);
+}
+
+/* Price Range Inputs */
+.price-inputs {
+  gap: 1rem;
+}
+
+.price-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.price-label {
+  font-size: 0.85rem;
+  color: var(--color-text-main);
+  font-weight: 500;
+}
+
+.price-input {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: var(--color-text-main);
+  transition: all 0.3s;
+}
+
+.price-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(231, 111, 81, 0.1);
+}
+
+.price-input::placeholder {
+  color: #adb5bd;
+}
+

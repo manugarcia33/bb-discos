@@ -6,6 +6,7 @@ interface Product {
   artist: string;
   price: number;
   installments: number;
+  genre: string;
 }
 
 interface ProductCardProps {
