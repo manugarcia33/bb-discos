@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Hero from "./components/Hero";
@@ -7,14 +7,34 @@ import Sidebar from "./components/Sidebar";
 import FeaturedCarousel from "./components/FeaturedCarousel";
 import Categories from "./components/Categories";
 import OffersCarousel from "./components/OffersCarousel";
+import { getProducts } from "./services/api";
 
 function App() {
   const [currentView, setCurrentView] = useState("HOME");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Datos de ejemplo para los productos
-  const products = [
+  // Cargar productos desde la API al iniciar
+  useEffect(() => {
+    loadProducts();
+  }, []);
+
+  const loadProducts = async () => {
+    setLoading(true);
+    try {
+      const productsData = await getProducts();
+      setProducts(productsData);
+    } catch (error) {
+      console.error("Error al cargar productos:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Datos de ejemplo para los productos (COMENTADO - ahora se cargan desde la API)
+  /* const products = [
     {
       id: 1,
       title: "Abbey Road",
@@ -208,6 +228,7 @@ function App() {
       genre: "solistas-masculinos",
     },
   ];
+  */
 
   const handleCategoryClick = (categoryId: string) => {
     setSelectedCategory(categoryId);
@@ -236,18 +257,34 @@ function App() {
         {currentView === "HOME" && (
           <>
             <Hero onViewCatalog={() => setCurrentView("PRODUCTS")} />
-            <FeaturedCarousel />
-            <Categories onSelectCategory={handleCategoryClick} />
-            <OffersCarousel />
+            {loading ? (
+              <div style={{ textAlign: "center", padding: "4rem 0" }}>
+                <p>Cargando productos...</p>
+              </div>
+            ) : (
+              <>
+                <FeaturedCarousel />
+                <Categories onSelectCategory={handleCategoryClick} />
+                <OffersCarousel />
+              </>
+            )}
           </>
         )}
 
         {/* PRODUCTS VIEW */}
         {currentView === "PRODUCTS" && (
-          <ProductsView
-            products={products}
-            onNavigateHome={() => setCurrentView("HOME")}
-          />
+          <>
+            {loading ? (
+              <div style={{ textAlign: "center", padding: "4rem 0" }}>
+                <p>Cargando productos...</p>
+              </div>
+            ) : (
+              <ProductsView
+                products={products}
+                onNavigateHome={() => setCurrentView("HOME")}
+              />
+            )}
+          </>
         )}
       </main>
 

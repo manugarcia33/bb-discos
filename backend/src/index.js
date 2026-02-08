@@ -2,7 +2,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-
+const db = require("./config/database");
 // Cargamos las variables de entorno del archivo .env
 dotenv.config();
 
@@ -20,11 +20,20 @@ app.use(cors());
 app.use(express.json());
 
 // ===== RUTAS =====
+// Importar rutas
+const productsRoutes = require("./routes/products");
+const categoriesRoutes = require("./routes/categories");
+
 // Ruta de prueba para verificar que el servidor funciona
 app.get("/", (req, res) => {
   res.json({
     message: "🎵 BB Discos API funcionando correctamente",
     version: "1.0.0",
+    endpoints: {
+      products: "/api/products",
+      categories: "/api/categories",
+      health: "/api/health",
+    },
   });
 });
 
@@ -36,9 +45,17 @@ app.get("/api/health", (req, res) => {
   });
 });
 
+// Montar rutas de la API
+app.use("/api/products", productsRoutes);
+app.use("/api/categories", categoriesRoutes);
+
 // ===== INICIAR SERVIDOR =====
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`\n🚀 Servidor corriendo en http://localhost:${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-  console.log(`⏰ Started at: ${new Date().toLocaleString()}\n`);
+  console.log(`⏰ Started at: ${new Date().toLocaleString()}`);
+
+  // Probar conexión a la base de datos
+  await db.testConnection();
+  console.log("");
 });

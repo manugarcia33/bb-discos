@@ -1,6 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
 import FiltersBar from "./FiltersBar";
+import { getProducts } from "../services/api";
 
 interface Product {
   id: number;
@@ -17,28 +18,38 @@ interface ProductsViewProps {
 }
 
 export default function ProductsView({
-  products,
+  products: initialProducts,
   onNavigateHome,
 }: ProductsViewProps) {
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(0);
+  const [filteredProducts, setFilteredProducts] =
+    useState<Product[]>(initialProducts);
+  const [loading, setLoading] = useState(false);
 
-  // Filtrar productos
-  const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
-      // Filtro por género
-      const matchesGenre =
-        selectedGenres.length === 0 || selectedGenres.includes(product.genre);
+  // Cargar productos filtrados desde la API cuando cambien los filtros
+  useEffect(() => {
+    loadFilteredProducts();
+  }, [selectedGenres, minPrice, maxPrice]);
 
-      // Filtro por precio
-      const matchesMinPrice = minPrice === 0 || product.price >= minPrice;
-      const matchesMaxPrice = maxPrice === 0 || product.price <= maxPrice;
-      const matchesPrice = matchesMinPrice && matchesMaxPrice;
-
-      return matchesGenre && matchesPrice;
-    });
-  }, [products, selectedGenres, minPrice, maxPrice]);
+  const loadFilteredProducts = async () => {
+    setLoading(true);
+    try {
+      const filters = {
+        category: selectedGenres,
+        minPrice,
+        maxPrice,
+      };
+      const productsData = await getProducts(filters);
+      setFilteredProducts(productsData);
+    } catch (error) {
+      console.error("Error al cargar productos filtrados:", error);
+      setFilteredProducts(initialProducts);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="products-section">
@@ -73,13 +84,18 @@ export default function ProductsView({
             {/* Results Count */}
             <div className="products-header">
               <h2 className="products-count">
-                {filteredProducts.length}{" "}
-                {filteredProducts.length === 1 ? "producto" : "productos"}
+                {loading
+                  ? "Cargando..."
+                  : `${filteredProducts.length} ${filteredProducts.length === 1 ? "producto" : "productos"}`}
               </h2>
             </div>
 
             {/* Products Grid */}
-            {filteredProducts.length > 0 ? (
+            {loading ? (
+              <div style={{ textAlign: "center", padding: "4rem 0" }}>
+                <p>Aplicando filtros...</p>
+              </div>
+            ) : filteredProducts.length > 0 ? (
               <div className="row">
                 {filteredProducts.map((product) => (
                   <div
