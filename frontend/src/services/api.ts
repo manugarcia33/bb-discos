@@ -32,7 +32,7 @@ interface APIProduct {
   updated_at: string;
 }
 
-interface Product {
+export interface Product {
   id: number;
   title: string;
   artist: string;

@@ -7,13 +7,13 @@ import Sidebar from "./components/Sidebar";
 import FeaturedCarousel from "./components/FeaturedCarousel";
 import Categories from "./components/Categories";
 import OffersCarousel from "./components/OffersCarousel";
-import { getProducts } from "./services/api";
+import { getProducts, type Product } from "./services/api";
 
 function App() {
   const [currentView, setCurrentView] = useState("HOME");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [products, setProducts] = useState([]);
+  const [_selectedCategory, setSelectedCategory] = useState("all");
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Cargar productos desde la API al iniciar
