@@ -10,14 +10,16 @@ dotenv.config();
 const app = express();
 
 // Definimos el puerto (viene del .env o usa 5000 por defecto)
-const PORT = process.env.PORT || 5000 || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo`);
-});
+const PORT = process.env.PORT || 5000;
 
 // ===== MIDDLEWARES =====
 // CORS permite que tu frontend (React) se comunique con este backend
-app.use(cors());
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || "http://localhost:5173",
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
 
 // Permite que el servidor entienda JSON en las peticiones
 app.use(express.json());
