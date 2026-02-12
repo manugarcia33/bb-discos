@@ -55,7 +55,7 @@ app.get("/api/health", (req, res) => {
 // Montar rutas de la API
 app.use("/api/products", productsRoutes);
 app.use("/api/categories", categoriesRoutes);
-app.use("/api/upload", uploadRoutes);
+app.use("/api", uploadRoutes);
 
 // ===== INICIAR SERVIDOR =====
 app.listen(PORT, async () => {
