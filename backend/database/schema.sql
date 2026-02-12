@@ -25,9 +25,7 @@ CREATE TABLE IF NOT EXISTS products (
   
   -- Descripción del vinilo
   label VARCHAR(150),
-  catalog_number VARCHAR(50),
   country VARCHAR(100),
-  year INTEGER,
   condition_cover VARCHAR(50),
   condition_media VARCHAR(50),
   
@@ -49,7 +47,6 @@ CREATE INDEX IF NOT EXISTS idx_products_category ON products(category_id);
 CREATE INDEX IF NOT EXISTS idx_products_featured ON products(is_featured);
 CREATE INDEX IF NOT EXISTS idx_products_on_sale ON products(is_on_sale);
 CREATE INDEX IF NOT EXISTS idx_products_artist ON products(artist);
-CREATE INDEX IF NOT EXISTS idx_products_year ON products(year);
 
 -- Insertar categorías iniciales
 INSERT INTO categories (name, slug) VALUES
