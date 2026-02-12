@@ -28,6 +28,7 @@ app.use(express.json());
 // Importar rutas
 const productsRoutes = require("./routes/products");
 const categoriesRoutes = require("./routes/categories");
+const uploadRoutes = require("./routes/upload");
 
 // Ruta de prueba para verificar que el servidor funciona
 app.get("/", (req, res) => {
@@ -53,6 +54,7 @@ app.get("/api/health", (req, res) => {
 // Montar rutas de la API
 app.use("/api/products", productsRoutes);
 app.use("/api/categories", categoriesRoutes);
+app.use("/api", uploadRoutes);
 
 // ===== INICIAR SERVIDOR =====
 app.listen(PORT, async () => {
