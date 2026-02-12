@@ -39,6 +39,7 @@ app.get("/", (req, res) => {
       products: "/api/products",
       categories: "/api/categories",
       health: "/api/health",
+      upload: "/api/upload",
     },
   });
 });
@@ -54,7 +55,7 @@ app.get("/api/health", (req, res) => {
 // Montar rutas de la API
 app.use("/api/products", productsRoutes);
 app.use("/api/categories", categoriesRoutes);
-app.use("/api", uploadRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // ===== INICIAR SERVIDOR =====
 app.listen(PORT, async () => {
