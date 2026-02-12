@@ -1,4 +1,5 @@
 import { Camera } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface Product {
   id: number;
@@ -15,7 +16,11 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   return (
-    <div className="card product-card">
+    <Link 
+      to={`/producto/${product.id}`} 
+      className="card product-card text-decoration-none"
+      style={{ cursor: "pointer" }}
+    >
       {/* Product Image Placeholder */}
       <div className="product-image-placeholder">
         <Camera size={48} color="#adb5bd" />
@@ -33,6 +38,6 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.installments.toLocaleString("es-AR")}
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

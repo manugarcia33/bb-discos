@@ -1,27 +1,24 @@
 import { Search, User, ShoppingCart, Menu } from "lucide-react";
+import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 
-interface HeaderProps {
-  onNavigate: (view: string) => void;
-  onToggleSidebar: () => void;
-}
-
-export default function Header({ onNavigate, onToggleSidebar }: HeaderProps) {
+export default function Header() {
   return (
     <header className="header-bbdiscos">
       <div className="header-content">
         {/* Left Section: Menu + Logo */}
         <div className="header-left">
-          <button className="menu-btn" aria-label="Menú" onClick={onToggleSidebar}>
+          <button className="menu-btn" aria-label="Menú">
             <Menu size={24} />
           </button>
-          <img
-            src={logo}
-            alt="BB DISCOS"
-            className="logo-image"
-            onClick={() => onNavigate("HOME")}
-            style={{ cursor: "pointer" }}
-          />
+          <Link to="/">
+            <img
+              src={logo}
+              alt="BB DISCOS"
+              className="logo-image"
+              style={{ cursor: "pointer" }}
+            />
+          </Link>
         </div>
 
         {/* Center Section: Search Bar */}

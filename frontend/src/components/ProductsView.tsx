@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
 import FiltersBar from "./FiltersBar";
 import { getProducts } from "../services/api";
@@ -12,20 +13,11 @@ interface Product {
   genre: string;
 }
 
-interface ProductsViewProps {
-  products: Product[];
-  onNavigateHome: () => void;
-}
-
-export default function ProductsView({
-  products: initialProducts,
-  onNavigateHome,
-}: ProductsViewProps) {
+export default function ProductsView() {
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(0);
-  const [filteredProducts, setFilteredProducts] =
-    useState<Product[]>(initialProducts);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
 
   // Cargar productos filtrados desde la API cuando cambien los filtros
@@ -45,7 +37,6 @@ export default function ProductsView({
       setFilteredProducts(productsData);
     } catch (error) {
       console.error("Error al cargar productos filtrados:", error);
-      setFilteredProducts(initialProducts);
     } finally {
       setLoading(false);
     }
@@ -58,7 +49,7 @@ export default function ProductsView({
         <nav aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a onClick={onNavigateHome}>Inicio</a>
+              <Link to="/">Inicio</Link>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               Productos

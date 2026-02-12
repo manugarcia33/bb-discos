@@ -1,8 +1,6 @@
-interface HeroProps {
-  onViewCatalog: () => void;
-}
+import { Link } from "react-router-dom";
 
-export default function Hero({ onViewCatalog }: HeroProps) {
+export default function Hero() {
   return (
     <div className="hero-section">
       <div className="container">
@@ -16,9 +14,9 @@ export default function Hero({ onViewCatalog }: HeroProps) {
               especiales. Cada disco es un viaje al pasado, listo para girar en
               tu tocadiscos.
             </p>
-            <button className="btn btn-lg btn-cta" onClick={onViewCatalog}>
+            <Link to="/productos" className="btn btn-lg btn-cta">
               Explorar catálogo
-            </button>
+            </Link>
           </div>
 
           {/* Hero Turntable */}
