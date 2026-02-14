@@ -5,8 +5,11 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "dev": "nodemon --env-file=.env.development src/index.js",
+    "dev:prod": "nodemon --env-file=.env.production src/index.js",
+    "start:prod": "node --env-file=.env.production src/index.js",
     "import-csv": "node scripts/importVinyls.js",
+    "copy-from-supabase": "node scripts/copyFromSupabase.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

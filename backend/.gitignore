@@ -1,10 +1,12 @@
 # Dependencies
 node_modules/
 
-# Environment variables
+# Environment variables (mantener .env.example)
 .env
 .env.local
+.env.development
 .env.production
+.env.*.local
 
 # Logs
 npm-debug.log*
