@@ -25,6 +25,7 @@ interface APIProduct {
   year: number | null;
   stock: number;
   image_url: string | null;
+  main_image_url: string | null;
   is_featured: boolean;
   is_on_sale: boolean;
   discount_percentage: number;
@@ -105,7 +106,7 @@ export const getProducts = async (
         category: product.category_name,
         stock: product.stock,
         year: product.year,
-        imageUrl: product.image_url,
+        imageUrl: product.main_image_url || product.image_url,
         isFeatured: product.is_featured,
         isOnSale: product.is_on_sale,
         discountPercentage: product.discount_percentage,
@@ -143,7 +144,7 @@ export const getProductById = async (id: number): Promise<Product> => {
       category: product.category_name,
       stock: product.stock,
       year: product.year,
-      imageUrl: product.image_url,
+      imageUrl: product.main_image_url || product.image_url,
       isFeatured: product.is_featured,
       isOnSale: product.is_on_sale,
       discountPercentage: product.discount_percentage,

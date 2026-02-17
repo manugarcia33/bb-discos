@@ -11,7 +11,15 @@ router.get("/", async (req, res) => {
     const { category, minPrice, maxPrice, featured, onSale } = req.query;
 
     let query = `
-      SELECT p.*, c.name as category_name, c.slug as category_slug
+      SELECT p.*, 
+             c.name as category_name, 
+             c.slug as category_slug,
+             COALESCE(
+               (SELECT image_url FROM product_images 
+                WHERE product_id = p.id AND is_main = true 
+                LIMIT 1),
+               p.image_url
+             ) as main_image_url
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
       WHERE 1=1
@@ -76,7 +84,15 @@ router.get("/:id", async (req, res) => {
 
     const result = await db.query(
       `
-      SELECT p.*, c.name as category_name, c.slug as category_slug
+      SELECT p.*, 
+             c.name as category_name, 
+             c.slug as category_slug,
+             COALESCE(
+               (SELECT image_url FROM product_images 
+                WHERE product_id = p.id AND is_main = true 
+                LIMIT 1),
+               p.image_url
+             ) as main_image_url
       FROM products p
       LEFT JOIN categories c ON p.category_id = c.id
       WHERE p.id = $1
@@ -91,9 +107,20 @@ router.get("/:id", async (req, res) => {
       });
     }
 
+    // Obtener todas las imágenes del producto
+    const images = await db.query(
+      `SELECT * FROM product_images 
+       WHERE product_id = $1 
+       ORDER BY display_order ASC`,
+      [id],
+    );
+
     res.json({
       success: true,
-      product: result.rows[0],
+      product: {
+        ...result.rows[0],
+        images: images.rows,
+      },
     });
   } catch (error) {
     console.error("Error al obtener producto:", error);

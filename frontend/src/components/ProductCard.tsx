@@ -8,6 +8,7 @@ interface Product {
   price: number;
   installments: number;
   genre: string;
+  imageUrl?: string | null;
 }
 
 interface ProductCardProps {
@@ -16,14 +17,26 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   return (
-    <Link 
-      to={`/producto/${product.id}`} 
+    <Link
+      to={`/producto/${product.id}`}
       className="card product-card text-decoration-none"
       style={{ cursor: "pointer" }}
     >
-      {/* Product Image Placeholder */}
+      {/* Product Image */}
       <div className="product-image-placeholder">
-        <Camera size={48} color="#adb5bd" />
+        {product.imageUrl ? (
+          <img
+            src={product.imageUrl}
+            alt={`${product.artist} - ${product.title}`}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+        ) : (
+          <Camera size={48} color="#adb5bd" />
+        )}
       </div>
 
       {/* Product Info */}
