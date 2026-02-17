@@ -1,8 +1,8 @@
 // Script para ejecutar migraciones en Supabase (producción)
-require('dotenv').config({ path: '.env.production' });
-const { Pool } = require('pg');
-const fs = require('fs');
-const path = require('path');
+require("dotenv").config({ path: ".env.production" });
+const { Pool } = require("pg");
+const fs = require("fs");
+const path = require("path");
 
 async function runMigration() {
   const pool = new Pool({
@@ -11,22 +11,25 @@ async function runMigration() {
     database: process.env.DB_NAME,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    ssl: { rejectUnauthorized: false }
+    ssl: { rejectUnauthorized: false },
   });
 
   try {
-    console.log('🚀 Conectando a Supabase (producción)...\n');
+    console.log("🚀 Conectando a Supabase (producción)...\n");
 
     // Leer el archivo de migración
-    const migrationPath = path.join(__dirname, '../database/migration_multiple_images_table.sql');
-    const migrationSQL = fs.readFileSync(migrationPath, 'utf8');
+    const migrationPath = path.join(
+      __dirname,
+      "../database/migration_multiple_images_table.sql",
+    );
+    const migrationSQL = fs.readFileSync(migrationPath, "utf8");
 
-    console.log('📋 Ejecutando migración...\n');
+    console.log("📋 Ejecutando migración...\n");
 
     // Ejecutar el SQL
     await pool.query(migrationSQL);
 
-    console.log('✅ Migración ejecutada exitosamente!\n');
+    console.log("✅ Migración ejecutada exitosamente!\n");
 
     // Verificar que se creó la tabla
     const result = await pool.query(`
@@ -46,9 +49,8 @@ async function runMigration() {
 
     console.log(`✨ Imágenes principales migradas: ${migrated.rows[0].count}`);
     console.log(`\n🎉 ¡Base de datos de producción actualizada correctamente!`);
-
   } catch (error) {
-    console.error('❌ Error al ejecutar migración:', error.message);
+    console.error("❌ Error al ejecutar migración:", error.message);
     console.error(error);
   } finally {
     await pool.end();
