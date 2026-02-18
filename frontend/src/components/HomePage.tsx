@@ -7,9 +7,9 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <FeaturedCarousel />
-      <Categories />
       <OffersCarousel />
+      <Categories />
+      <FeaturedCarousel />
     </>
   );
 }

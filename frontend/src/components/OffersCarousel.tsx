@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Tag } from "lucide-react";
+import { getProducts, type Product } from "../services/api";
 
 interface OfferAlbum {
   id: number;
@@ -14,6 +15,45 @@ interface OfferAlbum {
 export default function OffersCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(3);
+  const [offerAlbums, setOfferAlbums] = useState<OfferAlbum[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Cargar ofertas desde la API
+  useEffect(() => {
+    const fetchOffers = async () => {
+      try {
+        const products = await getProducts({ onSale: true });
+
+        if (products && Array.isArray(products)) {
+          const offers = products.map((product: Product) => ({
+            id: product.id,
+            title: product.title,
+            artist: product.artist,
+            price: product.price,
+            originalPrice:
+              product.discountPercentage > 0
+                ? Math.round(
+                    product.price / (1 - product.discountPercentage / 100),
+                  )
+                : product.price,
+            discount: product.discountPercentage || 0,
+            image:
+              product.imageUrl ||
+              "https://images.unsplash.com/photo-1619983081563-430f63602796?w=400&h=400&fit=crop",
+          }));
+          setOfferAlbums(offers);
+        }
+      } catch (error) {
+        console.error("Error al cargar ofertas:", error);
+        // En caso de error, dejar el array vacío
+        setOfferAlbums([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchOffers();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,7 +72,8 @@ export default function OffersCarousel() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const offerAlbums: OfferAlbum[] = [
+  // Datos por defecto si no hay ofertas
+  const defaultOffers: OfferAlbum[] = [
     {
       id: 1,
       title: "Led Zeppelin IV",
@@ -41,7 +82,7 @@ export default function OffersCarousel() {
       originalPrice: 32000,
       discount: 25,
       image:
-        "https://via.placeholder.com/400x400/6a4c93/ffffff?text=Led+Zeppelin",
+        "https://images.unsplash.com/photo-1619983081563-430f63602796?w=400&h=400&fit=crop",
     },
     {
       id: 2,
@@ -50,7 +91,8 @@ export default function OffersCarousel() {
       price: 21000,
       originalPrice: 28000,
       discount: 25,
-      image: "https://via.placeholder.com/400x400/1982c4/ffffff?text=Eagles",
+      image:
+        "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=400&h=400&fit=crop",
     },
     {
       id: 3,
@@ -60,7 +102,7 @@ export default function OffersCarousel() {
       originalPrice: 26000,
       discount: 25,
       image:
-        "https://via.placeholder.com/400x400/8ac926/000000?text=Springsteen",
+        "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=400&h=400&fit=crop",
     },
     {
       id: 4,
@@ -69,7 +111,8 @@ export default function OffersCarousel() {
       price: 27000,
       originalPrice: 36000,
       discount: 25,
-      image: "https://via.placeholder.com/400x400/ff595e/ffffff?text=The+Wall",
+      image:
+        "https://images.unsplash.com/photo-1512733596533-7b00ccf8ebaf?w=400&h=400&fit=crop",
     },
     {
       id: 5,
@@ -78,11 +121,22 @@ export default function OffersCarousel() {
       price: 22500,
       originalPrice: 30000,
       discount: 25,
-      image: "https://via.placeholder.com/400x400/ffca3a/000000?text=Nirvana",
+      image:
+        "https://images.unsplash.com/photo-1603048297172-c92544798d5a?w=400&h=400&fit=crop",
     },
   ];
 
-  const maxIndex = Math.max(0, offerAlbums.length - itemsPerView);
+  // Usar datos reales o por defecto
+  const displayAlbums =
+    isLoading || offerAlbums.length === 0 ? defaultOffers : offerAlbums;
+  const maxIndex = Math.max(0, displayAlbums.length - itemsPerView);
+
+  // Debug temporal
+  console.log("OffersCarousel:", {
+    isLoading,
+    offerAlbumsLength: offerAlbums.length,
+    displayAlbumsLength: displayAlbums.length,
+  });
 
   const handlePrev = () => {
     setCurrentIndex((prev) => Math.max(0, prev - 1));
@@ -125,7 +179,7 @@ export default function OffersCarousel() {
                 transform: getTransform(),
               }}
             >
-              {offerAlbums.map((album) => (
+              {displayAlbums.map((album) => (
                 <div key={album.id} className="carousel-item">
                   <div className="album-card offer-card">
                     <div className="offer-badge">{album.discount}% OFF</div>

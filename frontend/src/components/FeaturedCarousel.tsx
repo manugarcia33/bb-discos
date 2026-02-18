@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { getProducts, type Product } from "../services/api";
 
 interface Album {
   id: number;
@@ -13,6 +14,39 @@ interface Album {
 export default function FeaturedCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(3);
+  const [featuredAlbums, setFeaturedAlbums] = useState<Album[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Cargar destacados desde la API
+  useEffect(() => {
+    const fetchFeatured = async () => {
+      try {
+        const products = await getProducts({ featured: true });
+
+        if (products && Array.isArray(products)) {
+          const featured = products.map((product: Product) => ({
+            id: product.id,
+            title: product.title,
+            artist: product.artist,
+            price: product.price,
+            image:
+              product.imageUrl ||
+              "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
+            year: product.year ? String(product.year) : undefined,
+          }));
+          setFeaturedAlbums(featured);
+        }
+      } catch (error) {
+        console.error("Error al cargar destacados:", error);
+        // En caso de error, dejar el array vacío
+        setFeaturedAlbums([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchFeatured();
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -31,14 +65,15 @@ export default function FeaturedCarousel() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const featuredAlbums: Album[] = [
+  // Datos por defecto si no hay destacados
+  const defaultAlbums: Album[] = [
     {
       id: 1,
       title: "Abbey Road",
       artist: "The Beatles",
       price: 30000,
       image:
-        "https://via.placeholder.com/400x400/e76f51/ffffff?text=Abbey+Road",
+        "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
       year: "1969",
     },
     {
@@ -47,7 +82,7 @@ export default function FeaturedCarousel() {
       artist: "Pink Floyd",
       price: 35000,
       image:
-        "https://via.placeholder.com/400x400/264653/ffffff?text=Pink+Floyd",
+        "https://images.unsplash.com/photo-1487180144351-b8472da7d491?w=400&h=400&fit=crop",
       year: "1973",
     },
     {
@@ -55,7 +90,8 @@ export default function FeaturedCarousel() {
       title: "Thriller",
       artist: "Michael Jackson",
       price: 32000,
-      image: "https://via.placeholder.com/400x400/2a9d8f/ffffff?text=Thriller",
+      image:
+        "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop",
       year: "1982",
     },
     {
@@ -63,7 +99,8 @@ export default function FeaturedCarousel() {
       title: "Rumours",
       artist: "Fleetwood Mac",
       price: 28000,
-      image: "https://via.placeholder.com/400x400/e9c46a/000000?text=Rumours",
+      image:
+        "https://images.unsplash.com/photo-1496293455970-f8581aae0e3b?w=400&h=400&fit=crop",
       year: "1977",
     },
     {
@@ -71,12 +108,19 @@ export default function FeaturedCarousel() {
       title: "Back in Black",
       artist: "AC/DC",
       price: 29000,
-      image: "https://via.placeholder.com/400x400/f4a261/000000?text=AC/DC",
+      image:
+        "https://images.unsplash.com/photo-1458560871784-56d23406c091?w=400&h=400&fit=crop",
       year: "1980",
     },
   ];
 
-  const maxIndex = Math.max(0, featuredAlbums.length - itemsPerView);
+  // Usar datos reales o por defecto
+  const displayAlbums =
+    isLoading || featuredAlbums.length === 0 ? defaultAlbums : featuredAlbums;
+  const maxIndex = Math.max(0, displayAlbums.length - itemsPerView);
+
+  // Debug temporal
+  console.log('FeaturedCarousel:', { isLoading, featuredAlbumsLength: featuredAlbums.length, displayAlbumsLength: displayAlbums.length });
 
   const handlePrev = () => {
     setCurrentIndex((prev) => Math.max(0, prev - 1));
@@ -116,7 +160,7 @@ export default function FeaturedCarousel() {
                 transform: getTransform(),
               }}
             >
-              {featuredAlbums.map((album) => (
+              {displayAlbums.map((album) => (
                 <div key={album.id} className="carousel-item">
                   <div className="album-card featured-card">
                     <div className="album-image-wrapper">
