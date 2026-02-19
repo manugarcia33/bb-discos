@@ -49,10 +49,11 @@ export default function ProductDetail() {
         setProduct(data);
         setImages(imgs);
         // Imagen principal: la marcada como main, o la primera, o la del producto
-        const mainImg = imgs.find((i) => i.is_main)?.image_url
-          || imgs[0]?.image_url
-          || data.imageUrl
-          || null;
+        const mainImg =
+          imgs.find((i) => i.is_main)?.image_url ||
+          imgs[0]?.image_url ||
+          data.imageUrl ||
+          null;
         setSelectedImage(mainImg);
         setError(false);
       } catch (err) {
@@ -135,7 +136,11 @@ export default function ProductDetail() {
               <img
                 src={selectedImage}
                 alt={product.title}
-                style={{ maxWidth: "100%", maxHeight: "100%", objectFit: "contain" }}
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "contain",
+                }}
               />
             ) : (
               <Camera size={120} color="#adb5bd" />
@@ -151,9 +156,10 @@ export default function ProductDetail() {
                   onClick={() => setSelectedImage(img.image_url)}
                   style={{
                     padding: 0,
-                    border: selectedImage === img.image_url
-                      ? "2px solid var(--color-accent)"
-                      : "2px solid transparent",
+                    border:
+                      selectedImage === img.image_url
+                        ? "2px solid var(--color-accent)"
+                        : "2px solid transparent",
                     borderRadius: "6px",
                     overflow: "hidden",
                     width: "72px",
@@ -167,7 +173,11 @@ export default function ProductDetail() {
                   <img
                     src={img.image_url}
                     alt={img.alt_text || product.title}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
                   />
                 </button>
               ))}
@@ -183,18 +193,36 @@ export default function ProductDetail() {
           <div className="mb-4">
             {product.isOnSale && product.discountPercentage > 0 ? (
               <div className="d-flex align-items-center gap-3 flex-wrap">
-                <div className="h1 fw-bold mb-0" style={{ color: "var(--color-accent)" }}>
+                <div
+                  className="h1 fw-bold mb-0"
+                  style={{ color: "var(--color-accent)" }}
+                >
                   ${product.price.toLocaleString("es-AR")}
                 </div>
-                <span className="text-muted" style={{ textDecoration: "line-through", fontSize: "1.25rem" }}>
-                  ${Math.round(product.price / (1 - product.discountPercentage / 100)).toLocaleString("es-AR")}
+                <span
+                  className="text-muted"
+                  style={{
+                    textDecoration: "line-through",
+                    fontSize: "1.25rem",
+                  }}
+                >
+                  $
+                  {Math.round(
+                    product.price / (1 - product.discountPercentage / 100),
+                  ).toLocaleString("es-AR")}
                 </span>
-                <span className="offer-badge" style={{ position: "static", boxShadow: "none" }}>
+                <span
+                  className="offer-badge"
+                  style={{ position: "static", boxShadow: "none" }}
+                >
                   -{product.discountPercentage}%
                 </span>
               </div>
             ) : (
-              <div className="h1 fw-bold" style={{ color: "var(--color-accent)" }}>
+              <div
+                className="h1 fw-bold"
+                style={{ color: "var(--color-accent)" }}
+              >
                 ${product.price.toLocaleString("es-AR")}
               </div>
             )}
