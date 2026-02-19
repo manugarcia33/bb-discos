@@ -199,6 +199,25 @@ export const getCategoryBySlug = async (slug: string): Promise<any> => {
   }
 };
 
+// ===== IMÁGENES DE PRODUCTO =====
+
+/**
+ * Obtener todas las imágenes de un producto
+ * @param {number} productId - ID del producto
+ * @returns {Promise<Array>} Lista de imágenes
+ */
+export const getProductImages = async (productId: number): Promise<{ id: number; image_url: string; is_main: boolean; alt_text: string | null }[]> => {
+  try {
+    const response = await fetch(`${API_URL}/products/${productId}/images`);
+    if (!response.ok) return [];
+    const data = await response.json();
+    return data.images || [];
+  } catch (error) {
+    console.error("Error en getProductImages:", error);
+    return [];
+  }
+};
+
 // ===== HEALTH CHECK =====
 
 /**

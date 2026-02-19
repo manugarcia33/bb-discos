@@ -948,7 +948,7 @@ body {
   transition: transform 0.4s ease-in-out;
 }
 
-.carousel-item {
+.vinyl-slide {
   flex: 0 0 33.333%;
   min-width: 0;
   padding: 0 1rem;
@@ -1105,7 +1105,6 @@ body {
 /* Offer Cards Specific Styles */
 .offer-card {
   position: relative;
-  border: 2px solid var(--color-accent);
 }
 
 .offer-badge {
@@ -1265,7 +1264,7 @@ body {
     height: 220px;
   }
 
-  .carousel-item {
+  .vinyl-slide {
     flex: 0 0 50%;
     padding: 0 1rem;
   }
@@ -1321,7 +1320,7 @@ body {
     padding: 0 60px;
   }
 
-  .carousel-item {
+  .vinyl-slide {
     flex: 0 0 100%;
     padding: 0 1rem;
   }
