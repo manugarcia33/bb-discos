@@ -10,6 +10,10 @@
     "start:prod": "node --env-file=.env.production src/index.js",
     "import-csv": "node scripts/importVinyls.js",
     "copy-from-supabase": "node scripts/copyFromSupabase.js",
+    "test-cloudinary": "node scripts/testCloudinary.js",
+    "update-image": "node scripts/updateProductImage.js",
+    "add-images": "node scripts/addProductImages.js",
+    "migrate-production": "node scripts/migrateProduction.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

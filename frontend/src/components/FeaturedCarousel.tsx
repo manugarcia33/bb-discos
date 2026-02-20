@@ -1,159 +1,166 @@
-import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useEffect, useCallback } from "react";
+import { ChevronLeft, ChevronRight, Star, Camera } from "lucide-react";
+import { Link } from "react-router-dom";
+import { getProducts, type Product } from "../services/api";
 
-interface Album {
-  id: number;
-  title: string;
-  artist: string;
-  price: number;
-  image: string;
-  year?: string;
-}
+const ITEMS_PER_PAGE = 3;
 
 export default function FeaturedCarousel() {
+  const [products, setProducts] = useState<Product[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [itemsPerView, setItemsPerView] = useState(3);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setItemsPerView(1);
-      } else if (window.innerWidth < 992) {
-        setItemsPerView(2);
-      } else {
-        setItemsPerView(3);
-      }
-      setCurrentIndex(0);
+    const fetchFeatured = async () => {
+      setLoading(true);
+      const data = await getProducts({ featured: true });
+      setProducts(data);
+      setLoading(false);
     };
-
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    fetchFeatured();
   }, []);
 
-  const featuredAlbums: Album[] = [
-    {
-      id: 1,
-      title: "Abbey Road",
-      artist: "The Beatles",
-      price: 30000,
-      image:
-        "https://via.placeholder.com/400x400/e76f51/ffffff?text=Abbey+Road",
-      year: "1969",
-    },
-    {
-      id: 2,
-      title: "The Dark Side of the Moon",
-      artist: "Pink Floyd",
-      price: 35000,
-      image:
-        "https://via.placeholder.com/400x400/264653/ffffff?text=Pink+Floyd",
-      year: "1973",
-    },
-    {
-      id: 3,
-      title: "Thriller",
-      artist: "Michael Jackson",
-      price: 32000,
-      image: "https://via.placeholder.com/400x400/2a9d8f/ffffff?text=Thriller",
-      year: "1982",
-    },
-    {
-      id: 4,
-      title: "Rumours",
-      artist: "Fleetwood Mac",
-      price: 28000,
-      image: "https://via.placeholder.com/400x400/e9c46a/000000?text=Rumours",
-      year: "1977",
-    },
-    {
-      id: 5,
-      title: "Back in Black",
-      artist: "AC/DC",
-      price: 29000,
-      image: "https://via.placeholder.com/400x400/f4a261/000000?text=AC/DC",
-      year: "1980",
-    },
-  ];
+  const maxIndex = Math.max(0, products.length - ITEMS_PER_PAGE);
 
-  const maxIndex = Math.max(0, featuredAlbums.length - itemsPerView);
+  const prev = useCallback(() => {
+    setCurrentIndex((i) => Math.max(0, i - 1));
+  }, []);
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => Math.max(0, prev - 1));
-  };
+  const next = useCallback(() => {
+    setCurrentIndex((i) => Math.min(maxIndex, i + 1));
+  }, [maxIndex]);
 
-  const handleNext = () => {
-    setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
-  };
-
-  const getTransform = () => {
-    const percentage = 100 / itemsPerView;
-    return `translateX(-${currentIndex * percentage}%)`;
-  };
+  const translateX = -(currentIndex * (100 / ITEMS_PER_PAGE));
 
   return (
     <section className="featured-section">
       <div className="container">
-        <div className="section-header">
-          <h2 className="section-title">Vinilos Destacados</h2>
-          <p className="section-subtitle">Las joyas de nuestra colección</p>
+        <div className="section-header text-center">
+          <div className="d-flex align-items-center justify-content-center gap-2 mb-1">
+            <Star size={28} fill="currentColor" color="var(--color-accent)" />
+            <h2 className="section-title mb-0">Destacados</h2>
+            <Star size={28} fill="currentColor" color="var(--color-accent)" />
+          </div>
+          <p className="section-subtitle">
+            Los vinilos más pedidos de nuestra colección
+          </p>
         </div>
 
-        <div className="carousel-container">
-          <button
-            className="carousel-btn carousel-btn-left"
-            onClick={handlePrev}
-            disabled={currentIndex === 0}
-            aria-label="Anterior"
-          >
-            <ChevronLeft size={28} />
-          </button>
-
-          <div className="carousel-track">
+        {loading ? (
+          <div className="d-flex justify-content-center py-5">
             <div
-              className="carousel-items"
-              style={{
-                transform: getTransform(),
-              }}
+              className="spinner-border"
+              style={{ color: "var(--color-accent)" }}
+              role="status"
             >
-              {featuredAlbums.map((album) => (
-                <div key={album.id} className="carousel-item">
-                  <div className="album-card featured-card">
-                    <div className="album-image-wrapper">
-                      <img
-                        src={album.image}
-                        alt={album.title}
-                        className="album-image"
-                      />
-                      <div className="album-overlay">
-                        <button className="btn-view-details">
-                          Ver detalles
-                        </button>
-                      </div>
-                    </div>
-                    <div className="album-info">
-                      <h3 className="album-title">{album.title}</h3>
-                      <p className="album-artist">{album.artist}</p>
-                      {album.year && <p className="album-year">{album.year}</p>}
-                      <p className="album-price">
-                        ${album.price.toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
+              <span className="visually-hidden">Cargando...</span>
             </div>
           </div>
+        ) : products.length === 0 ? (
+          <p className="text-center text-muted py-5">
+            No hay productos destacados disponibles.
+          </p>
+        ) : (
+          <div className="carousel-container">
+            {/* Prev button */}
+            <button
+              className="carousel-btn carousel-btn-left"
+              onClick={prev}
+              disabled={currentIndex === 0}
+              aria-label="Anterior"
+            >
+              <ChevronLeft size={22} />
+            </button>
 
-          <button
-            className="carousel-btn carousel-btn-right"
-            onClick={handleNext}
-            disabled={currentIndex >= maxIndex}
-            aria-label="Siguiente"
-          >
-            <ChevronRight size={28} />
-          </button>
-        </div>
+            <div className="carousel-track">
+              <div
+                className="carousel-items"
+                style={{ transform: `translateX(${translateX}%)` }}
+              >
+                {products.map((product) => (
+                  <div key={product.id} className="vinyl-slide">
+                    <Link
+                      to={`/producto/${product.id}`}
+                      className="album-card text-decoration-none d-block"
+                    >
+                      <div className="album-image-wrapper">
+                        {product.imageUrl ? (
+                          <img
+                            src={product.imageUrl}
+                            alt={`${product.artist} - ${product.title}`}
+                            className="album-image"
+                          />
+                        ) : (
+                          <div
+                            className="album-image d-flex align-items-center justify-content-center"
+                            style={{ background: "#e9ecef" }}
+                          >
+                            <Camera size={48} color="#adb5bd" />
+                          </div>
+                        )}
+                        <div className="album-overlay">
+                          <span className="btn-view-details">Ver detalle</span>
+                        </div>
+                      </div>
+
+                      <div className="album-info">
+                        <p className="album-title">{product.title}</p>
+                        <p className="album-artist">{product.artist}</p>
+                        {product.year && (
+                          <p className="album-year">{product.year}</p>
+                        )}
+                        <p className="album-price">
+                          ${product.price.toLocaleString("es-AR")}
+                        </p>
+                        <p
+                          className="product-installments"
+                          style={{ fontSize: "0.8rem", marginTop: "0.25rem" }}
+                        >
+                          3 cuotas sin interés de $
+                          {product.installments.toLocaleString("es-AR")}
+                        </p>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Next button */}
+            <button
+              className="carousel-btn carousel-btn-right"
+              onClick={next}
+              disabled={currentIndex >= maxIndex}
+              aria-label="Siguiente"
+            >
+              <ChevronRight size={22} />
+            </button>
+          </div>
+        )}
+
+        {/* Dot indicators */}
+        {!loading && products.length > ITEMS_PER_PAGE && (
+          <div className="d-flex justify-content-center gap-2 mt-4">
+            {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentIndex(i)}
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: "50%",
+                  border: "none",
+                  background:
+                    i === currentIndex ? "var(--color-accent)" : "#d0d0d0",
+                  padding: 0,
+                  cursor: "pointer",
+                  transition: "background 0.3s",
+                }}
+                aria-label={`Ir a página ${i + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

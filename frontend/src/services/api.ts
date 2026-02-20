@@ -25,6 +25,7 @@ interface APIProduct {
   year: number | null;
   stock: number;
   image_url: string | null;
+  main_image_url: string | null;
   is_featured: boolean;
   is_on_sale: boolean;
   discount_percentage: number;
@@ -105,7 +106,7 @@ export const getProducts = async (
         category: product.category_name,
         stock: product.stock,
         year: product.year,
-        imageUrl: product.image_url,
+        imageUrl: product.main_image_url || product.image_url,
         isFeatured: product.is_featured,
         isOnSale: product.is_on_sale,
         discountPercentage: product.discount_percentage,
@@ -143,7 +144,7 @@ export const getProductById = async (id: number): Promise<Product> => {
       category: product.category_name,
       stock: product.stock,
       year: product.year,
-      imageUrl: product.image_url,
+      imageUrl: product.main_image_url || product.image_url,
       isFeatured: product.is_featured,
       isOnSale: product.is_on_sale,
       discountPercentage: product.discount_percentage,
@@ -195,6 +196,29 @@ export const getCategoryBySlug = async (slug: string): Promise<any> => {
   } catch (error) {
     console.error("Error en getCategoryBySlug:", error);
     throw error;
+  }
+};
+
+// ===== IMÁGENES DE PRODUCTO =====
+
+/**
+ * Obtener todas las imágenes de un producto
+ * @param {number} productId - ID del producto
+ * @returns {Promise<Array>} Lista de imágenes
+ */
+export const getProductImages = async (
+  productId: number,
+): Promise<
+  { id: number; image_url: string; is_main: boolean; alt_text: string | null }[]
+> => {
+  try {
+    const response = await fetch(`${API_URL}/products/${productId}/images`);
+    if (!response.ok) return [];
+    const data = await response.json();
+    return data.images || [];
+  } catch (error) {
+    console.error("Error en getProductImages:", error);
+    return [];
   }
 };
 

@@ -2,13 +2,17 @@ import { Search, User, ShoppingCart, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 
-export default function Header() {
+interface HeaderProps {
+  onMenuClick?: () => void;
+}
+
+export default function Header({ onMenuClick }: HeaderProps) {
   return (
     <header className="header-bbdiscos">
       <div className="header-content">
         {/* Left Section: Menu + Logo */}
         <div className="header-left">
-          <button className="menu-btn" aria-label="Menú">
+          <button className="menu-btn" aria-label="Menú" onClick={onMenuClick}>
             <Menu size={24} />
           </button>
           <Link to="/">

@@ -29,6 +29,7 @@ app.use(express.json());
 const productsRoutes = require("./routes/products");
 const categoriesRoutes = require("./routes/categories");
 const uploadRoutes = require("./routes/upload");
+const productImagesRoutes = require("./routes/productImages");
 
 // Ruta de prueba para verificar que el servidor funciona
 app.get("/", (req, res) => {
@@ -40,6 +41,7 @@ app.get("/", (req, res) => {
       categories: "/api/categories",
       health: "/api/health",
       upload: "/api/upload",
+      productImages: "/api/products/:id/images",
     },
   });
 });
@@ -54,6 +56,7 @@ app.get("/api/health", (req, res) => {
 
 // Montar rutas de la API
 app.use("/api/products", productsRoutes);
+app.use("/api/products", productImagesRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api", uploadRoutes);
 

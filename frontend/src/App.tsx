@@ -14,7 +14,7 @@ function App() {
     <Router>
       <div className="app-container">
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <Header />
+        <Header onMenuClick={() => setSidebarOpen(true)} />
         <main className="flex-grow-1">
           <Routes>
             <Route path="/" element={<HomePage />} />
