@@ -249,15 +249,6 @@ export default function ProductDetail() {
               </p>
             </div>
           </div>
-
-          {/* Stock */}
-          {product.stock > 0 && (
-            <div className="alert alert-success">
-              ✅ <strong>En stock</strong> ({product.stock} disponible
-              {product.stock > 1 ? "s" : ""})
-            </div>
-          )}
-
           {/* Botón de compra */}
           <div className="d-grid gap-2">
             <button className="btn btn-dark btn-lg">AGREGAR AL CARRITO</button>
