@@ -30,6 +30,8 @@ const productsRoutes = require("./routes/products");
 const categoriesRoutes = require("./routes/categories");
 const uploadRoutes = require("./routes/upload");
 const productImagesRoutes = require("./routes/productImages");
+const authRoutes = require("./routes/auth");
+const adminRoutes = require("./routes/admin");
 
 // Ruta de prueba para verificar que el servidor funciona
 app.get("/", (req, res) => {
@@ -42,6 +44,8 @@ app.get("/", (req, res) => {
       health: "/api/health",
       upload: "/api/upload",
       productImages: "/api/products/:id/images",
+      auth: "/api/auth",
+      admin: "/api/admin",
     },
   });
 });
@@ -59,6 +63,8 @@ app.use("/api/products", productsRoutes);
 app.use("/api/products", productImagesRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api", uploadRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
 
 // ===== INICIAR SERVIDOR =====
 app.listen(PORT, async () => {

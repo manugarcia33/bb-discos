@@ -6,24 +6,29 @@ import HomePage from "./components/HomePage";
 import ProductsView from "./components/ProductsView";
 import ProductDetail from "./components/ProductDetail";
 import Sidebar from "./components/Sidebar";
+import AdminPanel from "./components/AdminPanel";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <Router>
-      <div className="app-container">
-        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        <Header onMenuClick={() => setSidebarOpen(true)} />
-        <main className="flex-grow-1">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/productos" element={<ProductsView />} />
-            <Route path="/producto/:id" element={<ProductDetail />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <AuthProvider>
+        <div className="app-container">
+          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+          <Header onMenuClick={() => setSidebarOpen(true)} />
+          <main className="flex-grow-1">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/productos" element={<ProductsView />} />
+              <Route path="/producto/:id" element={<ProductDetail />} />
+              <Route path="/admin" element={<AdminPanel />} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </AuthProvider>
     </Router>
   );
 }

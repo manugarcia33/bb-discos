@@ -237,3 +237,59 @@ export const checkAPIHealth = async () => {
     return false;
   }
 };
+
+// ===== ADMIN =====
+
+/**
+ * Obtener estadísticas del panel de admin (requiere token admin)
+ */
+export const getAdminStats = async (token: string) => {
+  const res = await fetch(`${API_URL}/admin/stats`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Error al obtener estadísticas");
+  return res.json();
+};
+
+/**
+ * Obtener órdenes desde el panel de admin
+ */
+export const getAdminOrders = async (token: string, page = 1) => {
+  const res = await fetch(`${API_URL}/admin/orders?page=${page}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Error al obtener órdenes");
+  return res.json();
+};
+
+/**
+ * Actualizar estado de una orden
+ */
+export const updateOrderStatus = async (
+  token: string,
+  orderId: number,
+  status: string,
+) => {
+  const res = await fetch(`${API_URL}/admin/orders/${orderId}/status`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ status }),
+  });
+  if (!res.ok) throw new Error("Error al actualizar estado");
+  return res.json();
+};
+
+/**
+ * Eliminar un producto (admin)
+ */
+export const deleteProduct = async (token: string, productId: number) => {
+  const res = await fetch(`${API_URL}/admin/products/${productId}`, {
+    method: "DELETE",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error("Error al eliminar producto");
+  return res.json();
+};
